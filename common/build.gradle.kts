@@ -1,18 +1,18 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 plugins {
-    id("java")
     id("org.jetbrains.kotlin.multiplatform")
+    id("kotlinx-serialization")
 }
 
 repositories {
+    maven("https://dl.bintray.com/kotlin/kotlinx")
+    maven("https://dl.bintray.com/kotlin/ktor")
+    google()
+    jcenter()
     mavenCentral()
 }
 
-
-dependencies {
-   testImplementation("junit:junit:4.12")
-}
 
 kotlin {
     /* Targets configuration omitted.
@@ -40,24 +40,29 @@ kotlin {
         commonMain {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
-                implementation( "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3")
-            }
-        }
-        commonTest {
-            dependencies {
-                implementation("org.jetbrains.kotlin:test-common")
-                implementation("org.jetbrains.kotlin:test-annotations-common")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.4")
+                implementation("io.ktor:ktor-client:1.3.2")
+                implementation("com.soywiz.korlibs.klock:klock:1.10.0")
+                implementation("io.ktor:ktor-client-json:1.3.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.20.0")
             }
         }
     }
 
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4")
+        implementation("io.ktor:ktor-client-android:1.3.2")
+        implementation("io.ktor:ktor-client-json-jvm:1.3.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
     }
 
     sourceSets["iosMain"].dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.4")
+        implementation("io.ktor:ktor-client-ios:1.3.2")
+        implementation("io.ktor:ktor-client-json-ios:1.0.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.20.0")
     }
 }
 
@@ -80,10 +85,12 @@ val packForXcode by tasks.creating(Sync::class) {
     /// generate a helpful ./gradlew wrapper with embedded Java path
     doLast {
         val gradlew = File(targetDir, "gradlew")
-        gradlew.writeText("#!/bin/bash\n"
-                + "export 'JAVA_HOME=${System.getProperty("java.home")}'\n"
-                + "cd '${rootProject.rootDir}'\n"
-                + "./gradlew \$@\n")
+        gradlew.writeText(
+            "#!/bin/bash\n"
+                    + "export 'JAVA_HOME=${System.getProperty("java.home")}'\n"
+                    + "cd '${rootProject.rootDir}'\n"
+                    + "./gradlew \$@\n"
+        )
         gradlew.setExecutable(true)
     }
 }
