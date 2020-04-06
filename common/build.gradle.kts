@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.*
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("kotlinx-serialization")
+    id("org.jetbrains.kotlin.native.cocoapods")
 }
 
 repositories {
@@ -19,16 +20,22 @@ kotlin {
     *  To find out how to configure the targets, please follow the link:
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
-    val iOSTarget: (String, KotlinNativeTarget.() -> Unit) -> org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget =
+    cocoapods {
+        summary = "Shared module for Android and iOS"
+        homepage = "https://github.com/oscarg798/TODORa"
+
+    }
+
+    val iOSTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
         if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
             ::iosArm64
         else
             ::iosX64
 
     iOSTarget("ios") {
-        binaries {
-            framework {
-                baseName = "SharedCode"
+        compilations {
+            val main by getting {
+                kotlinOptions.freeCompilerArgs = listOf("-Xobjc-generics")
             }
         }
     }

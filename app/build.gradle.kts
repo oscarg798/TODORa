@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.70")
     implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("com.google.android.material:material:1.0.0")
     implementation("androidx.core:core-ktx:1.2.0")
 
     implementation( "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
@@ -49,7 +50,6 @@ dependencies {
     implementation("androidx.ui:ui-tooling:0.1.0-dev02")
     implementation("androidx.ui:ui-layout:0.1.0-dev02")
     implementation("androidx.ui:ui-material:0.1.0-dev02")
-
 
     androidTestImplementation("androidx.test.ext:junit:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
