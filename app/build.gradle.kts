@@ -26,6 +26,13 @@ android {
         getByName("release"){
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            testCoverageEnabled = true
+        }
+    }
+
+    unitTests.all {
+        jacoco {
+            includeNoLocationClasses = true
         }
     }
 
